@@ -1,0 +1,37 @@
+{
+    "variables" : {
+        "region" : "",
+        "aws_access_key": "",
+        "aws_secret_key": "",
+	"ssh_username": ""
+    },
+    "builders" : [
+        {
+            "type" : "amazon-ebs",
+            "profile" : "default",
+            "region" : "{{user `region`}}",
+            "instance_type" : "t2.micro",
+			"vpc_id": "vpc-0fd82266ee9af89a3",
+			"subnet_id": "subnet-0532b64b2ce6b2930",
+            "access_key": "{{user `aws_access_key`}}",
+            "secret_key": "{{user `aws_secret_key`}}",
+            "source_ami" : "ami-09d069a04349dc3cb",
+            "ssh_username" : "{{user `ssh_username`}}",
+            "ami_name" : "future-jenkins-master-node",
+            "ami_description" : "Amazon Linux Image with Jenkins Server",
+            "run_tags" : {
+                "Name" : "future-jenkins-master"
+            },
+			"security_group_id" : "sg-0797500f0b2d6a64f",
+			"ssh_keypair_name" : "key pair",
+			"ssh_private_key_file" : "key file path"			
+        }
+    ],
+    "provisioners" : [
+        {
+            "type" : "shell",
+            "script" : "./master-setup.sh",
+			"execute_command" : "sudo -S sh '{{ .Path }}'"
+        }
+    ]
+}
